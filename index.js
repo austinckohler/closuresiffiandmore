@@ -15,32 +15,43 @@
 // 10. Track the user's score to make the game more fun! So each time an answer is correct, add 1 point to the score (Hint: I'm going to use the power of closures for this, but you don't have to, just do this with the tools you feel more comfortable at this point).
 // 11. Display the score in the console. Use yet another method for this.
 
-function Question(question, answers, correct) {
-  this.question = question;
-  this.answers = answers;
-  this.correct = correct;
-}
-
-Question.prototype.displayQuestion = function () {
-  console.log(this.question);
-  for (let i = 0; i < this.answers.length; i++) {
-    console.log(i + ": " + this.answers[i]);
+(function () {
+  function Question(question, answers, correct) {
+    this.question = question;
+    this.answers = answers;
+    this.correct = correct;
   }
-};
-const firstQuestion = new Question("Can dogs speak?", ["Yes", "No"], 1);
-const secondQuestion = new Question(
-  "What is your dogs name?",
-  ["Rosie", "Sandy", "Rhoady"],
-  0
-);
-const thirdQuestion = new Question(
-  "How does your dog act around other dogs?",
-  ["Nervous", "Aggressive", "Excited", "Friendly"],
-  1
-);
 
-let questions = [firstQuestion, secondQuestion, thirdQuestion];
+  Question.prototype.displayQuestion = function () {
+    console.log(this.question);
+    for (let i = 0; i < this.answers.length; i++) {
+      console.log(i + ": " + this.answers[i]);
+    }
+  };
 
-let randomQuestion = Math.floor(Math.random() * questions.length);
+  Question.prototype.checkAnswer = function (ans) {
+    ans === this.correct
+      ? console.log("Correct")
+      : console.log("Not so fast wise guy that is incorrect.");
+  };
+  const firstQuestion = new Question("Can dogs speak?", ["Yes", "No"], 1);
+  const secondQuestion = new Question(
+    "What is your dogs name?",
+    ["Rosie", "Sandy", "Rhoady"],
+    0
+  );
+  const thirdQuestion = new Question(
+    "How does your dog act around other dogs?",
+    ["Nervous", "Aggressive", "Excited", "Friendly"],
+    1
+  );
 
-questions[randomQuestion].displayQuestion();
+  let questions = [firstQuestion, secondQuestion, thirdQuestion];
+
+  let randomQuestion = Math.floor(Math.random() * questions.length);
+
+  questions[randomQuestion].displayQuestion();
+
+  const answer = parseInt(prompt("Please select the correct answer!"));
+  questions[randomQuestion].checkAnswer(answer);
+})();
