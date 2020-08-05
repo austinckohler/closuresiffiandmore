@@ -29,10 +29,21 @@
     }
   };
 
-  Question.prototype.checkAnswer = function (ans) {
-    ans === this.correct
-      ? console.log("Correct")
-      : console.log("Not so fast wise guy that is incorrect.");
+  Question.prototype.checkAnswer = function (ans, callBack) {
+    let scr;
+    if (ans === this.correct) {
+      console.log("Correct");
+      scr = callBack(true);
+    } else {
+      console.log("Not so fast wise guy that is incorrect.");
+      scr = callBack(false);
+    }
+    this.displayScore(scr);
+  };
+
+  Question.prototype.displayScore = function (score) {
+    console.log("Current Score: " + score);
+    console.log("-------------");
   };
   const firstQuestion = new Question("Can dogs speak?", ["Yes", "No"], 1);
   const secondQuestion = new Question(
@@ -45,13 +56,32 @@
     ["Nervous", "Aggressive", "Excited", "Friendly"],
     1
   );
-
   let questions = [firstQuestion, secondQuestion, thirdQuestion];
 
-  let randomQuestion = Math.floor(Math.random() * questions.length);
+  function score() {
+    let scr = 0;
+    return function (correct) {
+      if (correct) {
+        scr++;
+      }
+      return scr;
+    };
+  }
+  let holdScore = score();
 
-  questions[randomQuestion].displayQuestion();
+  function nextQuestion() {
+    let randomQuestion = Math.floor(Math.random() * questions.length);
 
-  const answer = parseInt(prompt("Please select the correct answer!"));
-  questions[randomQuestion].checkAnswer(answer);
+    questions[randomQuestion].displayQuestion();
+
+    let answer = prompt("Please select the correct answer!");
+
+    if (answer === "!!!") {
+      return;
+    } else {
+      questions[randomQuestion].checkAnswer(parseInt(answer), holdScore);
+      nextQuestion();
+    }
+  }
+  nextQuestion();
 })();
